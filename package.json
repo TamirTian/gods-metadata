@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "axios": "^0.19.0",
+    "ethers": "^4.0.39"
+  },
+  "scripts": {
+    "start": "node src"
+  },
+  "name": "gods-metadata",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "license": "MIT",
+  "repository": "git@github.com:TamirTian/gods-metadata.git",
+  "author": "Tamir <tamir@inject.top>"
+}
