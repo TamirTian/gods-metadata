@@ -1,0 +1,7 @@
+.idea
+node_modules
+.env
+lib/config/env/localhost.js
+.vscode
+package-lock.json
+mytest/
