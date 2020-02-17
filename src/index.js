@@ -3,7 +3,6 @@ const ethers = require('ethers');
 const config = require('./config');
 const abi = ["function getProto(uint _tokenId) public view returns (uint16)"];
 
-
 class Metadata {
   constructor (eth_rpc) {
     const provider = new ethers.providers.JsonRpcProvider(eth_rpc);
@@ -17,7 +16,7 @@ class Metadata {
   async get (tokenId) {
     const protoId = await this.getProtoId(tokenId);
     const { data } = await axios.get(`https://api.godsunchained.com/v0/proto/${protoId}`);
-    const attributes = {};
+    const attributes = { protoId: ~~protoId }
 
     ['god', 'rarity', 'tribe', 'mana', 'attack', 'health', 'type', 'set']
       .forEach(filed => {
@@ -31,8 +30,8 @@ class Metadata {
         if (['object'].includes(valueType) && value.Valid) {
           attributes[filed] = value['Int64'] || value['String'] || undefined
         }
-
       });
+
     if (data.god) attributes['god'] = data.god;
 
     return {
