@@ -4,9 +4,12 @@ const config = require('./config');
 const abi = ["function getProto(uint _tokenId) public view returns (uint16)"];
 
 class Metadata {
-  constructor (eth_rpc) {
-    const provider = new ethers.providers.JsonRpcProvider(eth_rpc);
-    this.contract = new ethers.Contract(config.contract, abi, provider);
+  constructor (eth_rpc,options) {
+    const {image,url} = options || {}
+    const provider = new ethers.providers.JsonRpcProvider(eth_rpc)
+    this.contract = new ethers.Contract(config.contract, abi, provider)
+    this.url = url || 'https://api.godsunchained.com/v0/proto/${protoId}'
+    this.image = image  || 'https://images.godsunchained.com/cards/250/${protoId}.png'
   }
 
   getProtoId (tokenId) {
@@ -15,7 +18,7 @@ class Metadata {
 
   async get (tokenId) {
     const protoId = await this.getProtoId(tokenId);
-    const { data } = await axios.get(`https://api.godsunchained.com/v0/proto/${protoId}`);
+    const { data } = await axios.get(this.url.replace('${protoId}',protoId));
     const attributes = { protoId: ~~protoId }
 
     ['god', 'rarity', 'tribe', 'mana', 'attack', 'health', 'type', 'set']
@@ -37,7 +40,7 @@ class Metadata {
     return {
       name: data.name,
       description: data.effect,
-      image: `https://images.godsunchained.com/cards/250/${protoId}.png`,
+      image: this.image.replace('${protoId}',protoId),
       attributes
     }
   }
